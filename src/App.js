@@ -1,25 +1,44 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import "./App.css";
+import FormData from "./components/FormData";
+import ConsumptionList from "./components/Consumption/ConsumptionFilteredList";
 
-function App() {
+const App = () => {
+  const initialFormState = {
+    id: "",
+    name: "",
+    price: "",
+    type: "",
+    purchaseDate: new Date(),
+    memo: false,
+    memoText: "",
+    repurchase: false,
+  };
+
+  const [formState, setFormState] = useState([initialFormState]);
+
+  const handleFormSubmit = (data) => {
+    setFormState((prev) => [
+      {
+        id: Math.random().toString(),
+        name: data.name,
+        price: data.price,
+        type: data.type,
+        purchaseDate: new Date(data.purchaseDate),
+        memo: data.memo,
+        memoText: data.memoText,
+        repurchase: data.repurchase,
+      },
+      ...prev,
+    ]);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <FormData onFormSubmit={handleFormSubmit} />
+      <ConsumptionList formState={formState} />
+    </>
   );
-}
+};
 
 export default App;
