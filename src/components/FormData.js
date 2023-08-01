@@ -53,6 +53,7 @@ const FormData = ({ onFormSubmit }) => {
       <div>
         <label>유형</label>
         <select name="type" value={formData.type} onChange={handleChange}>
+          <option value="">---------</option>
           <option value="식료품">식료품</option>
           <option value="가전">가전</option>
           <option value="애완">애완</option>

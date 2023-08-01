@@ -1,17 +1,32 @@
+// ConsumptionList.jsx 파일
+
 import React, { useEffect, useState } from "react";
-import FormDataFilter from "../FormDataFilterUI";
+import FormDataFilterUI from "../FormDataFilterUI";
 import ConsumptionItems from "./ConsumptionItems";
 
 const ConsumptionList = ({ formState }) => {
-  const [filteredType, setType] = useState();
-  const [filteredSort, setSort] = useState();
-  const [filteredStartDate, setStartDate] = useState(new Date());
-  const [filteredEndDate, setEndDate] = useState(new Date());
+  const [filteredType, setType] = useState("");
+  const [filteredSort, setSort] = useState("");
+  const [filteredStartDate, setStartDate] = useState(null);
+  const [filteredEndDate, setEndDate] = useState(null);
 
-  //필터 함수
+  // 필터 함수
   const sortAndFilterItemList = () => {
+    // 어떤 필터도 적용되지 않은 경우
+    const isFilterActive =
+      !!filteredType ||
+      !!filteredStartDate ||
+      !!filteredEndDate ||
+      !!filteredSort;
+
+    if (!isFilterActive) {
+      // 필터가 적용되지 않았을 때 기존의 원본 formState를 반환합니다.
+      return formState;
+    }
+
     let copyItemList = [...formState];
 
+    // 필터를 하나씩 적용합니다.
     if (!!filteredType) {
       copyItemList = copyItemList.filter((v) => v.type === filteredType);
     }
@@ -23,6 +38,7 @@ const ConsumptionList = ({ formState }) => {
           v.purchaseDate <= new Date(filteredEndDate)
       );
     }
+
     if (filteredSort === "가격 높은 순") {
       copyItemList = copyItemList.sort((a, b) => b.price - a.price);
     } else if (filteredSort === "가격 낮은 순") {
@@ -50,7 +66,7 @@ const ConsumptionList = ({ formState }) => {
 
   return (
     <>
-      <FormDataFilter
+      <FormDataFilterUI
         filteredType={filteredType}
         setType={setType}
         filteredSort={filteredSort}
@@ -60,10 +76,11 @@ const ConsumptionList = ({ formState }) => {
         filteredEndDate={filteredEndDate}
         setEndDate={setEndDate}
       />
+
+      {/* sortAndFilterItemList 함수를 통해 필터링 된 리스트가 있는지 확인 후 렌더링 */}
       {sortAndFilterItemList().map((item) => (
         <ConsumptionItems
           key={item.id}
-          id={item.id}
           name={item.name}
           price={item.price}
           type={item.type}

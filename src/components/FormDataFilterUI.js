@@ -49,13 +49,13 @@ const FormDataFilter = ({
         <label>시작기간</label>
         <input
           type="date"
-          value={filteredStartDate}
+          value={filteredStartDate || ""}
           onChange={handleChangeStartDateFilter}
         ></input>
         <label>끝기간</label>
         <input
           type="date"
-          value={filteredEndDate}
+          value={filteredEndDate || ""}
           onChange={handleChangeEndDateFilter}
         ></input>
       </div>
